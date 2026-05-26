@@ -25,20 +25,24 @@ export function buildFilesystemSandbox(
     };
   }
 
-  if (platform === "linux") {
-    return {
-      denyRead: [
-        path.join(homeDir, ".ssh"),
-        path.join(homeDir, ".gnupg"),
-        path.join(homeDir, ".aws"),
-        path.join(homeDir, ".config", "gh"),
-        path.join(homeDir, ".config", "gcloud"),
-        path.join(homeDir, ".local", "share", "keyrings"),
-      ],
-    };
-  }
+  // Credentials, keys, and browser profiles the agent should never read.
+  // Mirrors the intent of the macOS ~/Library deny (which covered browser
+  // data and keychains). Used for Linux and as a default-deny fallback for
+  // any other platform, so an unrecognized platform is never left unsandboxed.
+  const sensitive = [
+    path.join(homeDir, ".ssh"),
+    path.join(homeDir, ".gnupg"),
+    path.join(homeDir, ".aws"),
+    path.join(homeDir, ".config", "gh"),
+    path.join(homeDir, ".config", "gcloud"),
+    path.join(homeDir, ".local", "share", "keyrings"),
+    // Browser profiles: cookies, saved passwords, history.
+    path.join(homeDir, ".mozilla"),
+    path.join(homeDir, ".config", "google-chrome"),
+    path.join(homeDir, ".config", "chromium"),
+  ];
 
-  return { denyRead: [] };
+  return { denyRead: sensitive };
 }
 
 export function buildPlatformSandboxGuidance(platform = process.platform): string {

@@ -16,10 +16,14 @@ test.describe("Exo Integration Tests", () => {
 
   test.beforeAll(async () => {
     // Launch the Electron app in test mode
+    const { ELECTRON_RUN_AS_NODE: _electronRunAsNode, ...baseEnv } = process.env;
     electronApp = await electron.launch({
-      args: [path.join(__dirname, "../out/main/index.js")],
+      args: [
+        path.join(__dirname, "../out/main/index.js"),
+        ...(process.platform === "linux" ? ["--no-sandbox"] : []),
+      ],
       env: {
-        ...process.env,
+        ...baseEnv,
         NODE_ENV: "test",
         EXO_TEST_MODE: "true",
       },

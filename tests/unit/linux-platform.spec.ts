@@ -69,9 +69,19 @@ test.describe("Claude agent platform sandbox", () => {
         "/home/alice/.gnupg",
         "/home/alice/.aws",
         "/home/alice/.local/share/keyrings",
+        // Browser profiles (parity with the macOS ~/Library deny).
+        "/home/alice/.mozilla",
+        "/home/alice/.config/google-chrome",
+        "/home/alice/.config/chromium",
       ]),
     );
     expect(sandbox.allowRead).toBeUndefined();
     expect(buildPlatformSandboxGuidance("linux")).toContain("On Linux");
+  });
+
+  test("falls back to default-deny (never unsandboxed) on an unknown platform", () => {
+    const sandbox = buildFilesystemSandbox("/home/alice", "freebsd");
+    expect(sandbox.denyRead).toContain("/home/alice/.ssh");
+    expect(sandbox.denyRead.length).toBeGreaterThan(0);
   });
 });

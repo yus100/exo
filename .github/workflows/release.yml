@@ -136,7 +136,9 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb libnss3 libatk-bridge2.0-0 libgtk-3-0 libxss1 libasound2t64
+          # python3-setuptools provides distutils, which node-gyp needs to
+          # rebuild better-sqlite3 for Electron (Python 3.12 dropped it from stdlib).
+          sudo apt-get install -y xvfb libnss3 libatk-bridge2.0-0 libgtk-3-0 libxss1 libasound2t64 python3-setuptools
 
       - name: Install dependencies
         run: npm ci
