@@ -41,9 +41,10 @@ test.describe("Sender Profile - Display", () => {
     await page.keyboard.press("j");
     await page.waitForTimeout(500);
 
-    // The email detail should show a subject line
-    const h1 = page.locator("h1").first();
-    await expect(h1).toBeVisible({ timeout: 5000 });
+    // The email detail should show its subject. Target the subject element
+    // directly (not h1.first(), which matched the macOS-only titlebar brand).
+    const subject = page.locator('[data-testid="email-subject"]').first();
+    await expect(subject).toBeVisible({ timeout: 5000 });
 
     // Sender name should be visible in the detail view
     // Demo emails have known senders
@@ -178,9 +179,9 @@ test.describe("Sender Profile - Switching Emails", () => {
 
     await page.waitForTimeout(500);
 
-    // App should still be responsive
-    const h1 = page.locator("h1").first();
-    await expect(h1).toBeVisible({ timeout: 5000 });
+    // App should still be responsive — the detail subject should still render.
+    const subject = page.locator('[data-testid="email-subject"]').first();
+    await expect(subject).toBeVisible({ timeout: 5000 });
 
     // Navigate back up
     for (let i = 0; i < 5; i++) {
