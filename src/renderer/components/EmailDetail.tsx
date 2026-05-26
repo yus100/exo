@@ -3591,10 +3591,7 @@ function EmailDetailInner({ isFullView = false }: EmailDetailProps) {
         <div className="px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700/50">
           <div className="flex items-start justify-between">
             <div className="flex-1 min-w-0">
-              <h1
-                data-testid="email-subject"
-                className="text-xl font-semibold text-gray-900 dark:text-gray-100 leading-tight"
-              >
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100 leading-tight">
                 {cleanSubject}
               </h1>
               {threadEmails.length > 1 && (
